@@ -42,4 +42,14 @@ class UserServices {
     //user name eka thiyenwanm username eka return karanwa naththm null eka return karnawa. false eka
     return userName != null;
   }
+
+  //get the user name and the email
+  static Future<Map<String, String>> getUserData() async {
+    //create an instance fpr shared preferences
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? userName = pref.getString("username");
+    String? email = pref.getString("email");
+
+    return {"username": userName!, "email": email!};
+  }
 }
