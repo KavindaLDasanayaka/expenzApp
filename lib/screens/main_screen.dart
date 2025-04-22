@@ -1,9 +1,13 @@
 import 'package:expenz/constants/colors.dart';
+import 'package:expenz/models/expense_model.dart';
+import 'package:expenz/models/income_model.dart';
 import 'package:expenz/screens/add_new_screen.dart';
 import 'package:expenz/screens/budget_screen.dart';
 import 'package:expenz/screens/home_screen.dart';
 import 'package:expenz/screens/profile_screen.dart';
 import 'package:expenz/screens/transactions_screen.dart';
+import 'package:expenz/services/expense_service.dart';
+import 'package:expenz/services/income_service.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,13 +19,61 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentPageIndex = 0;
+
+  List<Expense> expenseList = [];
+  List<Income> incomeList = [];
+
+  //function to fetch expenses
+  void fetchAllExpenses() async {
+    List<Expense> loadedExpense = await ExpenseService().loadExpenses();
+    setState(() {
+      expenseList = loadedExpense;
+      print(expenseList.length);
+    });
+  }
+
+  //function to fetch income
+  void fetchAllIncome() async {
+    List<Income> loadIncome = await IncomeService().loadIncome();
+    setState(() {
+      incomeList = loadIncome;
+      print(incomeList.length);
+    });
+  }
+
+  void addNewExpense(Expense newExpense) {
+    ExpenseService().saveExpenses(newExpense, context);
+
+    //update the list of expenses
+    setState(() {
+      expenseList.add(newExpense);
+    });
+  }
+
+  void addNewIncome(Income newIncome) {
+    IncomeService().saveIncome(newIncome, context);
+    setState(() {
+      incomeList.add(newIncome);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    setState(() {
+      fetchAllExpenses();
+      fetchAllIncome();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      AddNewScreen(),
       HomeScreen(),
       TransactionsScreen(),
-
+      AddNewScreen(addExpense: addNewExpense, addIncome: addNewIncome),
       BudgetScreen(),
       ProfileScreen(),
     ];

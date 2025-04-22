@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.example.expenz"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
@@ -42,3 +43,5 @@ android {
 flutter {
     source = "../.."
 }
+
+
