@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExpenseService {
-  //expense list
-  List<Expense> expensesList = [];
-
   //Define the key for storing expenses in shared preferences
   static const String _expenseKey = 'expenses';
 
@@ -74,5 +71,54 @@ class ExpenseService {
               .toList();
     }
     return loadedExpenses;
+  }
+
+  //delete the expense from the shared preferences from the id
+  Future<void> deleteExpense(int id, BuildContext context) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String>? existingExpenses = prefs.getStringList(_expenseKey);
+
+      //convert the existing expenses to a list of expense objects.
+      List<Expense> existingExpenseObjects = [];
+
+      if (existingExpenses != null) {
+        existingExpenseObjects =
+            existingExpenses
+                .map((e) => Expense.fromJSON(json.decode(e)))
+                .toList();
+      }
+
+      //remove the selected id expense
+      existingExpenseObjects.removeWhere((expens) => expens.id == id);
+
+      //convert to json list of strings
+
+      List<String> updatedExpenses =
+          existingExpenseObjects.map((e) => json.encode(e.toJSON())).toList();
+
+      //save updated list
+      await prefs.setStringList(_expenseKey, updatedExpenses);
+
+      //display success message
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Expense Deleted Successfully!"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (error) {
+      //display error message
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error Deleting Expense!"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 }

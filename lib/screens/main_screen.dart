@@ -28,16 +28,14 @@ class _MainScreenState extends State<MainScreen> {
     List<Expense> loadedExpense = await ExpenseService().loadExpenses();
     setState(() {
       expenseList = loadedExpense;
-      print(expenseList.length);
     });
   }
 
-  //function to fetch income
+  //function to fetch all income
   void fetchAllIncome() async {
-    List<Income> loadIncome = await IncomeService().loadIncome();
+    List<Income> loadedIncome = await IncomeService().loadIncome();
     setState(() {
-      incomeList = loadIncome;
-      print(incomeList.length);
+      incomeList = loadedIncome;
     });
   }
 
@@ -68,11 +66,32 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  //function to remove expense
+  void removeExpense(Expense expense) {
+    ExpenseService().deleteExpense(expense.id, context);
+    setState(() {
+      expenseList.remove(expense);
+    });
+  }
+
+  //function to remove the income
+  void removeIncome(Income income) {
+    IncomeService().deleteIncome(income.id, context);
+    setState(() {
+      incomeList.remove(income);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       HomeScreen(),
-      TransactionsScreen(),
+      TransactionsScreen(
+        expenseList: expenseList,
+        incomeList: incomeList,
+        onDissMissedExpense: removeExpense,
+        onDissMiessIncome: removeIncome,
+      ),
       AddNewScreen(addExpense: addNewExpense, addIncome: addNewIncome),
       BudgetScreen(),
       ProfileScreen(),

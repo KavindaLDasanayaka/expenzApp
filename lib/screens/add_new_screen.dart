@@ -424,10 +424,16 @@ class _AddNewScreenState extends State<AddNewScreen> {
                                 );
                                 //add expense
                                 widget.addExpense(expense);
+
+                                //clear the fields
+                                _titleController.clear();
+                                _amountController.clear();
+                                _descriptionController.clear();
                               } else {
+                                //existing income list eka load karagnnawa id eka hadaganna length eka ona hinda
                                 List<Income> loadedIncome =
                                     await IncomeService().loadIncome();
-                                //create income
+
                                 Income income = Income(
                                   id: loadedIncome.length + 1,
                                   title: _titleController.text,
@@ -442,8 +448,12 @@ class _AddNewScreenState extends State<AddNewScreen> {
                                   time: _selectedTime,
                                   description: _descriptionController.text,
                                 );
-                                //add expense
+
                                 widget.addIncome(income);
+
+                                _titleController.clear();
+                                _amountController.clear();
+                                _descriptionController.clear();
                               }
                             },
                             child: CustomButton(

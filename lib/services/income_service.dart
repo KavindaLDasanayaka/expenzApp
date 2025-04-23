@@ -5,57 +5,48 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IncomeService {
-  //income list
-  List<Income> existingIncome = [];
+  //define the key for store list
+  static const String _incomeKey = 'income';
 
-  //Define the key for storing expenses in shared preferences
-  static const String _incomeKey = "income";
-
-  //save the expense to shared preferences
+  //method to store
   Future<void> saveIncome(Income income, BuildContext context) async {
     try {
-      //shared preferences walain instance ekak hadagannawa
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      //shared pereferences wala thiyena tika string list ekakata dagannawa meka nullable wenanath puluwan.
-      List<String>? existingIncomes = prefs.getStringList(_incomeKey);
+      List<String>? existingIncomeList = prefs.getStringList(_incomeKey);
 
-      //itapasse list ekak widiyata ena strings tika convert karagena daganna ona income objects list ekakata . ekata me widyata aluth list ekak define karagnnawa.
-      List<Income> existingIncomeObjects = [];
+      List<Income> existingIncomeObject = [];
 
-      //dan ara exsting income list eka emptyada check karagnnawa empty naththam eke ewa obejcts walata convert karagnnawa kalin define karapu fromJson method eka use karala.
-
-      if (existingIncomes != null) {
-        existingIncomeObjects =
-            existingIncomes
+      if (existingIncomeList != null) {
+        existingIncomeObject =
+            existingIncomeList
                 .map((e) => Income.fromJSON(json.decode(e)))
                 .toList();
       }
 
-      // dan e convert karagan hadagathtu existing income object list ekata me method ekata pass karana income object eka add karagnnawa.
-      existingIncomeObjects.add(income);
+      //add the new income to list
+      existingIncomeObject.add(income);
 
-      //dan aye shared preferences wala store karaganna ona hinda aye encode karanna ona list of strings widyata.
+      //convert the object list to json string list
+      List<String> updatedIncomeList =
+          existingIncomeObject.map((e) => json.encode(e.toJSON())).toList();
 
-      List<String> updatedIncome =
-          existingIncomeObjects.map((e) => json.encode(e.toJSON())).toList();
-
-      //dan save karanwa shared preferences wala
-      await prefs.setStringList(_incomeKey, updatedIncome);
+      //save in shared prefereces
+      await prefs.setStringList(_incomeKey, updatedIncomeList);
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Income added successfully!"),
+            content: Text("Income Added Successfully!"),
             duration: Duration(seconds: 2),
           ),
         );
       }
-    } catch (e) {
+    } catch (error) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Income added Failed!"),
+            content: Text("Income Adding Failed!"),
             duration: Duration(seconds: 2),
           ),
         );
@@ -63,17 +54,69 @@ class IncomeService {
     }
   }
 
-  //load the incomes from shared pereferences
   Future<List<Income>> loadIncome() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? existingIncome = prefs.getStringList(_incomeKey);
 
-    List<Income> loadedIncome = [];
+    List<String>? existingIncomeList = prefs.getStringList(_incomeKey);
 
-    if (existingIncome != null) {
-      loadedIncome =
-          existingIncome.map((e) => Income.fromJSON(json.decode(e))).toList();
+    List<Income> loadedIncomeList = [];
+
+    if (existingIncomeList != null) {
+      loadedIncomeList =
+          existingIncomeList
+              .map((e) => Income.fromJSON(json.decode(e)))
+              .toList();
     }
-    return loadedIncome;
+
+    return loadedIncomeList;
+  }
+
+  //delete income from shared preferences
+  Future<void> deleteIncome(int id, BuildContext context) async {
+    try {
+      //get instance
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      List<String>? existingIncomeList = prefs.getStringList(_incomeKey);
+
+      List<Income> existingIncomeObjects = [];
+
+      if (existingIncomeList != null) {
+        existingIncomeObjects =
+            existingIncomeList
+                .map((e) => Income.fromJSON(json.decode(e)))
+                .toList();
+      }
+
+      //removing the selected id income
+      existingIncomeObjects.removeWhere((incom) => incom.id == id);
+
+      //convrt to json again
+      List<String> updatedIncomeList =
+          existingIncomeObjects.map((e) => json.encode(e.toJSON())).toList();
+
+      //save in shared Preferences
+      await prefs.setStringList(_incomeKey, updatedIncomeList);
+
+      //display success message
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Income Deleted Successfully!"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (error) {
+      print(error);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Income Deleting Failed!"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 }
