@@ -55,7 +55,6 @@ class ExpenseCard extends StatelessWidget {
                 expenseCategoryImages[category]!,
                 width: 20,
                 height: 20,
-                fit: BoxFit.cover,
               ),
             ),
           ),

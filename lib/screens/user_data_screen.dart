@@ -1,5 +1,6 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/constants.dart';
+import 'package:expenz/constants/core_utils.dart';
 import 'package:expenz/screens/main_screen.dart';
 import 'package:expenz/services/user_service.dart';
 import 'package:expenz/widgets/custom_button.dart';
@@ -192,18 +193,17 @@ class _UserDataScreenState extends State<UserDataScreen> {
                               email: email,
                               password: password,
                               confirmPassword: confirmPassword,
-                              context: context,
                             );
 
                             //navigate to the main screen.
-                            if (context.mounted) {
-                              Navigator.push(
+                            CoreUtils.postFrameCall(
+                              () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => MainScreen(),
                                 ),
-                              );
-                            }
+                              ),
+                            );
                           }
                         },
                         child: CustomButton(

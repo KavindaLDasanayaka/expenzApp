@@ -1,3 +1,4 @@
+import 'package:expenz/constants/constants.dart';
 import 'package:expenz/services/user_service.dart';
 import 'package:expenz/widgets/wrapper.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(fontFamily: "Inter"),
+            scaffoldMessengerKey: rootScaffoldMessengerKey,
             home: Wrapper(showMainScreen: hasUserName),
           );
         }

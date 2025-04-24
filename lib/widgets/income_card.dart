@@ -1,3 +1,4 @@
+import 'package:expenz/constants/color_extension.dart';
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/constants.dart';
 import 'package:expenz/models/income_model.dart';
@@ -46,15 +47,12 @@ class IncomeCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               // ignore: deprecated_member_use
-              color: kGreen.withOpacity(0.4),
+              // color: kGreen.withOpacity(0.4),
+              color: category.clr,
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset(
-                incomeCategoryImages[category]!,
-                width: 20,
-                height: 20,
-              ),
+              child: Image.asset(category.image, width: 20, height: 20),
             ),
           ),
           const SizedBox(width: 10),

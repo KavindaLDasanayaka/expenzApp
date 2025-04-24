@@ -57,31 +57,40 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: widget.expenseList.length,
-                      itemBuilder: (context, index) {
-                        final expense = widget.expenseList[index];
-                        return Dismissible(
-                          key: ValueKey(expense),
-                          direction: DismissDirection.startToEnd,
-                          onDismissed: (direction) {
-                            setState(() {
-                              widget.onDissMissedExpense(expense);
-                            });
-                          },
-                          child: ExpenseCard(
-                            title: expense.title,
-                            date: expense.date,
-                            amount: expense.amount,
-                            category: expense.category,
-                            description: expense.description,
-                            time: expense.time,
-                          ),
-                        );
-                      },
+                    child: Column(
+                      children: [
+                        widget.expenseList.isEmpty
+                            ? Text(
+                              "No expenses added yet, add some expenses to see here.",
+                              style: TextStyle(fontSize: 16, color: kGrey),
+                            )
+                            : ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: widget.expenseList.length,
+                              itemBuilder: (context, index) {
+                                final expense = widget.expenseList[index];
+                                return Dismissible(
+                                  key: ValueKey(expense),
+                                  direction: DismissDirection.startToEnd,
+                                  onDismissed: (direction) {
+                                    setState(() {
+                                      widget.onDissMissedExpense(expense);
+                                    });
+                                  },
+                                  child: ExpenseCard(
+                                    title: expense.title,
+                                    date: expense.date,
+                                    amount: expense.amount,
+                                    category: expense.category,
+                                    description: expense.description,
+                                    time: expense.time,
+                                  ),
+                                );
+                              },
+                            ),
+                      ],
                     ),
                   ),
                 ),
@@ -101,29 +110,38 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: ListView.builder(
-                      itemCount: widget.incomeList.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final income = widget.incomeList[index];
+                    child: Column(
+                      children: [
+                        widget.incomeList.isEmpty
+                            ? Text(
+                              "No expenses added yet, add some expenses to see here.",
+                              style: TextStyle(fontSize: 16, color: kGrey),
+                            )
+                            : ListView.builder(
+                              itemCount: widget.incomeList.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                final income = widget.incomeList[index];
 
-                        return Dismissible(
-                          onDismissed: (direction) {
-                            setState(() {
-                              widget.onDissMiessIncome(income);
-                            });
-                          },
-                          key: ValueKey(income),
-                          child: IncomeCard(
-                            title: income.title,
-                            description: income.description,
-                            category: income.category,
-                            amount: income.amount,
-                            time: income.time,
-                          ),
-                        );
-                      },
+                                return Dismissible(
+                                  onDismissed: (direction) {
+                                    setState(() {
+                                      widget.onDissMiessIncome(income);
+                                    });
+                                  },
+                                  key: ValueKey(income),
+                                  child: IncomeCard(
+                                    title: income.title,
+                                    description: income.description,
+                                    category: income.category,
+                                    amount: income.amount,
+                                    time: income.time,
+                                  ),
+                                );
+                              },
+                            ),
+                      ],
                     ),
                   ),
                 ),
