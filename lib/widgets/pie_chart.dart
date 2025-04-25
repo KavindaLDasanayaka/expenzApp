@@ -61,33 +61,34 @@ class _ChartState extends State<Chart> {
           radius: 60,
         ),
       ];
+    } else {
+      return [
+        PieChartSectionData(
+          color: incomeCategoryColors[IncomeCategory.freelance],
+          value: widget.incomeCategoryTotal[IncomeCategory.freelance] ?? 0,
+          showTitle: false,
+          radius: 60,
+        ),
+        PieChartSectionData(
+          color: incomeCategoryColors[IncomeCategory.passive],
+          value: widget.incomeCategoryTotal[IncomeCategory.passive] ?? 0,
+          showTitle: false,
+          radius: 60,
+        ),
+        PieChartSectionData(
+          color: incomeCategoryColors[IncomeCategory.salary],
+          value: widget.incomeCategoryTotal[IncomeCategory.salary] ?? 0,
+          showTitle: false,
+          radius: 60,
+        ),
+        PieChartSectionData(
+          color: incomeCategoryColors[IncomeCategory.sales],
+          value: widget.incomeCategoryTotal[IncomeCategory.sales] ?? 0,
+          showTitle: false,
+          radius: 60,
+        ),
+      ];
     }
-    return [
-      PieChartSectionData(
-        color: incomeCategoryColors[IncomeCategory.freelance],
-        value: widget.incomeCategoryTotal[IncomeCategory.freelance] ?? 0,
-        showTitle: false,
-        radius: 60,
-      ),
-      PieChartSectionData(
-        color: incomeCategoryColors[IncomeCategory.passive],
-        value: widget.incomeCategoryTotal[IncomeCategory.passive] ?? 0,
-        showTitle: false,
-        radius: 60,
-      ),
-      PieChartSectionData(
-        color: incomeCategoryColors[IncomeCategory.salary],
-        value: widget.incomeCategoryTotal[IncomeCategory.salary] ?? 0,
-        showTitle: false,
-        radius: 60,
-      ),
-      PieChartSectionData(
-        color: incomeCategoryColors[IncomeCategory.sales],
-        value: widget.incomeCategoryTotal[IncomeCategory.sales] ?? 0,
-        showTitle: false,
-        radius: 60,
-      ),
-    ];
   }
 
   @override
