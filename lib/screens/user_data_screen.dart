@@ -196,14 +196,14 @@ class _UserDataScreenState extends State<UserDataScreen> {
                             );
 
                             //navigate to the main screen.
-                            CoreUtils.postFrameCall(
-                              () => Navigator.push(
+                            if (password == confirmPassword) {
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => MainScreen(),
                                 ),
-                              ),
-                            );
+                              );
+                            }
                           }
                         },
                         child: CustomButton(
